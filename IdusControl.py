@@ -308,8 +308,8 @@ class CAMERA(QWidget):
             
             if self.light==False:
                 #from visu.visual2 import SEE
-                from visu import SEE2
-                self.visualisation=SEE2(name=self.nbcam,**self.kwds) ## Widget for visualisation and tools  self.confVisu permet d'avoir plusieurs camera et donc plusieurs fichier ini de visualisation
+                from visu import SEE
+                self.visualisation=SEE(name=self.nbcam,**self.kwds) ## Widget for visualisation and tools  self.confVisu permet d'avoir plusieurs camera et donc plusieurs fichier ini de visualisation
                 # self.visualisation.setWindowTitle('Visualization    '+ self.cameraType+"   " + self.ccdName+'       v.'+ self.version)
                 if self.separate==True:
                     print('ici')
