@@ -29,7 +29,7 @@ version=str(__version__)
 
 class CAMERA(QWidget):
     datareceived=QtCore.pyqtSignal(bool) # signal emited when receive image
-    
+    signalData=QtCore.pyqtSignal(object)
     def __init__(self,cam='Default',confFile='confCamera.ini',**kwds):
         '''
         '''
@@ -309,7 +309,7 @@ class CAMERA(QWidget):
             if self.light==False:
                 #from visu.visual2 import SEE
                 from visu import SEE
-                self.visualisation=SEE(name=self.nbcam,**self.kwds) ## Widget for visualisation and tools  self.confVisu permet d'avoir plusieurs camera et donc plusieurs fichier ini de visualisation
+                self.visualisation=SEE(parent=self,name=self.nbcam,**self.kwds) ## Widget for visualisation and tools  self.confVisu permet d'avoir plusieurs camera et donc plusieurs fichier ini de visualisation
                 # self.visualisation.setWindowTitle('Visualization    '+ self.cameraType+"   " + self.ccdName+'       v.'+ self.version)
                 if self.separate==True:
                     print('ici')
@@ -406,7 +406,8 @@ class CAMERA(QWidget):
             self.wait(0.1)
             
         self.data=data
-        self.visualisation.newDataReceived(self.data)
+        #self.visualisation.newDataReceived(self.data)
+        self.signalData.emit(self.data)
         self.imageReceived=True
         self.datareceived.emit(True)
         if self.CAM.camIsRunnig==False:
