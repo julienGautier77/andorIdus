@@ -109,14 +109,14 @@ class CAMERA(QWidget):
             # if camera is connected we address min and max value  and value to the shutter and gain box
             # print('camshutter',self.CAM.camParameter["exposureTime"])
             if self.CAM.camParameter["expMax"] >1500: # we limit exposure time at 1500ms
-                self.hSliderExposure.setMaximum(1500)
+                self.hSliderShutter.setMaximum(1500)
                 self.exposureBox.setMaximum(1500)
             else :
-                self.hSliderExposure.setMaximum(self.CAM.camParameter["expMax"])
+                self.hSliderShutter.setMaximum(self.CAM.camParameter["expMax"])
                 self.exposureBox.setMaximum(self.CAM.camParameter["expMax"])
-            self.hSliderExposure.setValue(int(self.CAM.camParameter["exposureTime"]))
+            self.hSliderShutter.setValue(int(self.CAM.camParameter["exposureTime"]))
             self.exposureBox.setValue(int(self.CAM.camParameter["exposureTime"]))
-            self.hSliderExposure.setMinimum(int(self.CAM.camParameter["expMin"]+1))
+            self.hSliderShutter.setMinimum(int(self.CAM.camParameter["expMin"]+1))
             self.exposureBox.setMinimum(int(self.CAM.camParameter["expMin"]+1))
             
             self.threadTemp = ThreadTemperature(CAM=self.CAM)
@@ -219,8 +219,8 @@ class CAMERA(QWidget):
             self.labelExp.setMaximumWidth(140)
             self.labelExp.setAlignment(Qt.AlignCenter)
             
-            self.hSliderExposure=QSlider(Qt.Horizontal)
-            self.hSliderExposure.setMaximumWidth(80)
+            self.hSliderShutter=QSlider(Qt.Horizontal)
+            self.hSliderShutter.setMaximumWidth(80)
             self.exposureBox=QSpinBox()
             self.exposureBox.setStyleSheet('font :bold  8pt')
             self.exposureBox.setMaximumWidth(120)
@@ -232,7 +232,7 @@ class CAMERA(QWidget):
             vboxExposure.setSpacing(0)
             vboxExposure.addWidget(self.labelExp)#,Qt.AlignLef)
             
-            hboxExposure.addWidget(self.hSliderExposure)
+            hboxExposure.addWidget(self.hSliderShutter)
             hboxExposure.addWidget(self.exposureBox)
             vboxExposure.addLayout(hboxExposure)
             vboxExposure.setSizeConstraint(QtGui.QLayout.SetFixedSize)
@@ -312,7 +312,7 @@ class CAMERA(QWidget):
                 self.visualisation=SEE(parent=self,name=self.nbcam,**self.kwds) ## Widget for visualisation and tools  self.confVisu permet d'avoir plusieurs camera et donc plusieurs fichier ini de visualisation
                 # self.visualisation.setWindowTitle('Visualization    '+ self.cameraType+"   " + self.ccdName+'       v.'+ self.version)
                 if self.separate==True:
-                    print('ici')
+                    # print('ici')
                     self.vbox2=QVBoxLayout() 
                     self.vbox2.addWidget(self.visualisation)
                     if self.aff=='left':
@@ -366,7 +366,7 @@ class CAMERA(QWidget):
         self.snapButton.clicked.connect(self.acquireOneImage)
         self.stopButton.clicked.connect(self.stopAcq)      
         self.exposureBox.editingFinished.connect(self.setExposure)    
-        self.hSliderExposure.sliderReleased.connect(self.mSliderSetExposure)
+        self.hSliderShutter.sliderReleased.connect(self.mSliderSetExposure)
         
         
         self.trigg.currentIndexChanged.connect(self.trigger)
@@ -404,10 +404,10 @@ class CAMERA(QWidget):
         '''
         if self.multi==True:
             self.wait(0.1)
-            
+        print('received')
         self.data=data
-        #self.visualisation.newDataReceived(self.data)
         self.signalData.emit(self.data)
+        # self.visualisation.newDataReceived(self.data)
         self.imageReceived=True
         self.datareceived.emit(True)
         if self.CAM.camIsRunnig==False:
@@ -429,7 +429,7 @@ class CAMERA(QWidget):
     
     
     def mSliderSetExposure(self): # for shutter slider 
-        sh=self.hSliderExposure.value() 
+        sh=self.hSliderShutter.value() 
         self.exposureBox.setValue(sh) # 
         self.CAM.setExposure(sh) # Set shutter CCD in ms
         self.conf.setValue(self.nbcam+"/shutter",float(sh))
@@ -461,7 +461,7 @@ class CAMERA(QWidget):
         self.stopButton.setEnabled(True)
         self.stopButton.setStyleSheet("QToolButton:!pressed{border-image: url(%s);background-color: transparent ;border-color: gray;}""QToolButton:pressed{image: url(%s);background-color: gray ;border-color: gray}"%(self.iconStop,self.iconStop) )
         self.trigg.setEnabled(False)
-        print('one acq')
+        # print('one acq')
         self.CAM.startOneAcq(self.nbShot)
         
     
@@ -503,7 +503,7 @@ class CAMERA(QWidget):
     def update_temp(self, temp=None):
         # if temp == None:
         #     temp = self.mte.GetTemperature()
-        print(temp)
+        # print(temp)
         self.tempBox.setText('%.1f °C' % temp)
     
     
@@ -631,8 +631,8 @@ if __name__ == "__main__":
     
     appli = QApplication(sys.argv) 
     appli.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
-    pathVisu='C:/Users/loa/Desktop/Python/camera/confCamera.ini'
-    e = CAMERA(cam='camDefault',fft='off',meas='on',affLight=False,aff='left',separate=False,multi=False,confpath=pathVisu)  
+    pathVisu='C:/Users/UPX/Desktop/python/andorIdus/confCamera.ini'
+    e = CAMERA(cam='camDefault',fft='off',meas='on',affLight=False,separate=False,multi=False,confpath=pathVisu)  
     e.show()
     # x= CAMERA(cam="cam2",fft='off',meas='on',affLight=True,multi=False)  
     # x.show()
