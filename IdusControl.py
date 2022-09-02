@@ -9,15 +9,15 @@ version : 2021.10
 """
 
 __author__='julien Gautier'
-__version__='2021.10'
+__version__='2022.09'
 
 
-from PyQt5.QtWidgets import QApplication,QVBoxLayout,QHBoxLayout,QWidget,QPushButton
-from PyQt5.QtWidgets import QComboBox,QSlider,QLabel,QSpinBox,QToolButton,QMenu,QInputDialog,QDockWidget,QDoubleSpinBox
+from PyQt6.QtWidgets import QApplication,QVBoxLayout,QHBoxLayout,QWidget,QPushButton,QLayout
+from PyQt6.QtWidgets import QComboBox,QSlider,QLabel,QSpinBox,QToolButton,QMenu,QInputDialog,QDockWidget,QDoubleSpinBox
 from pyqtgraph.Qt import QtCore
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
-from PyQt5 import QtGui 
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
+from PyQt6 import QtGui,QtCore
 import sys,time
 import pathlib,os
 import qdarkstyle
@@ -66,9 +66,9 @@ class CAMERA(QWidget):
         
         
         
-        # self.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5()) # qdarkstyle :  black windows style
+        # self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt6')) # qdarkstyle :  black windows style
         self.confPath=str(p.parent / confFile) # ini file path
-        self.conf=QtCore.QSettings(str(p.parent / self.confPath), QtCore.QSettings.IniFormat) # ini file 
+        self.conf=QtCore.QSettings(str(p.parent / self.confPath), QtCore.QSettings.Format.IniFormat) # ini file 
         self.kwds["confpath"]=self.confPath
         sepa=os.sep
         
@@ -90,7 +90,7 @@ class CAMERA(QWidget):
         self.openCam()
         self.setup()
         self.setCamPara()
-        #self.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+        #self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt6'))
     def openCam(self):
         try : 
             self.CAM=andorIdiusSDK2.ANDOR(cam=self.nbcam,conf=self.conf)
@@ -161,7 +161,7 @@ class CAMERA(QWidget):
             self.runButton.setStyleSheet("QToolButton:!pressed{border-image: url(%s);background-color: transparent ;border-color: green;}""QToolButton:pressed{image: url(%s);background-color: gray ;border-color: gray}"% (self.iconPlay,self.iconPlay) )
             
             self.snapButton=QToolButton(self)
-            self.snapButton.setPopupMode(0)
+            self.snapButton.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
             menu=QMenu()
             #menu.addAction('acq',self.oneImage)
             menu.addAction('set nb of shot',self.nbShotAction)
@@ -185,7 +185,7 @@ class CAMERA(QWidget):
             hbox1.addWidget(self.runButton)
             hbox1.addWidget(self.snapButton)
             hbox1.addWidget(self.stopButton)
-            hbox1.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+            hbox1.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
             hbox1.setContentsMargins(0, 10, 0, 10)
             self.widgetControl=QWidget(self)
             
@@ -203,7 +203,7 @@ class CAMERA(QWidget):
             self.labelTrigger.setStyleSheet('font :bold  10pt')
             self.itrig=self.trigg.currentIndex()
             hbox2=QHBoxLayout()
-            hbox2.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+            hbox2.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
             hbox2.setContentsMargins(5, 15, 0, 0)
             hbox2.addWidget(self.labelTrigger)
             
@@ -219,7 +219,7 @@ class CAMERA(QWidget):
             self.labelExp.setMaximumWidth(140)
             self.labelExp.setAlignment(Qt.AlignCenter)
             
-            self.hSliderShutter=QSlider(Qt.Horizontal)
+            self.hSliderShutter=QSlider(Qt.Orientation.Horizontal)
             self.hSliderShutter.setMaximumWidth(80)
             self.exposureBox=QSpinBox()
             self.exposureBox.setStyleSheet('font :bold  8pt')
@@ -235,7 +235,7 @@ class CAMERA(QWidget):
             hboxExposure.addWidget(self.hSliderShutter)
             hboxExposure.addWidget(self.exposureBox)
             vboxExposure.addLayout(hboxExposure)
-            vboxExposure.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+            vboxExposure.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
             vboxExposure.setContentsMargins(5, 5, 0, 0)
             
             self.widgetExposure=QWidget(self)
@@ -257,7 +257,7 @@ class CAMERA(QWidget):
             self.labelShutter.setStyleSheet('font :bold  10pt')
             self.iShutter=self.shutterBox.currentIndex()
             hbox2=QHBoxLayout()
-            hbox2.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+            hbox2.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
             hbox2.setContentsMargins(5, 15, 0, 0)
             hbox2.addWidget(self.labelShutter)
             
@@ -276,12 +276,12 @@ class CAMERA(QWidget):
             hboxTemp=QVBoxLayout()
             self.tempButton=QToolButton(self)
             self.tempButton.setMaximumWidth(60)
-            # self.tempButton.setAlignment(Qt.AlignCenter)
+            # self.tempButton.setAlignment((Qt.AlignmentFlag.AlignCenter)
             self.tempButton.setText('Temp:')
             hboxTemp.addWidget(self.tempButton)
             
             self.tempBox=QLabel()
-            self.tempBox.setAlignment(Qt.AlignCenter)
+            self.tempBox.setAlignment(Qt.AlignmentFlag.AlignCenter)
             hboxTemp.addWidget(self.tempBox)
             
             
@@ -590,7 +590,7 @@ class TEMPWIDGET(QWidget):
         self.isWinOpen=False
         self.parent=parent
         self.setup()
-        self.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+        self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt6'))
         self.cooler='off'
     def setup(self) :   
         self.setWindowIcon(QIcon('./icons/LOA.png'))
@@ -630,9 +630,9 @@ class TEMPWIDGET(QWidget):
 if __name__ == "__main__":       
     
     appli = QApplication(sys.argv) 
-    appli.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
-    pathVisu='C:/Users/UPX/Desktop/python/andorIdus/confCamera.ini'
-    e = CAMERA(cam='camDefault',fft='off',meas='on',affLight=False,separate=False,multi=False,confpath=pathVisu)  
+    appli.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt6'))
+    #pathVisu='C:/Users/UPX/Desktop/python/andorIdus/confCamera.ini'
+    e = CAMERA(cam='camDefault',fft='off',meas='on',affLight=False,separate=False,multi=False)#,confpath=pathVisu)  
     e.show()
     # x= CAMERA(cam="cam2",fft='off',meas='on',affLight=True,multi=False)  
     # x.show()
