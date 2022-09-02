@@ -10,7 +10,7 @@ import platform
 import numpy as np
 import sys
 import time
-from pyqtgraph.Qt import QtCore
+from PyQt6.QtCore import Qt
 
 
 ERROR_CODE = {

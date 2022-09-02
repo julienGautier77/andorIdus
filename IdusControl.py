@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Andor IDUS camera
+use andor sdk2
 
-
+C:\\Program Files\\Andor SOLIS\\Drivers\\atmcd32d"
 
 @author: juliengautier
 version : 2021.10
@@ -326,18 +327,18 @@ class CAMERA(QWidget):
                     self.dockControl.setTitleBarWidget(QWidget()) # to avoid tittle
                     
                     #self.dockControl.setFeatures(QDockWidget.DockWidgetMovable)
-                    self.visualisation.addDockWidget(Qt.TopDockWidgetArea,self.dockControl)
+                    self.visualisation.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea,self.dockControl)
                     self.dockTrig.setTitleBarWidget(QWidget())
-                    self.visualisation.addDockWidget(Qt.TopDockWidgetArea,self.dockTrig)
+                    self.visualisation.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea,self.dockTrig)
                     
                     self.dockShutter.setTitleBarWidget(QWidget())
-                    self.visualisation.addDockWidget(Qt.TopDockWidgetArea,self.dockShutter)
+                    self.visualisation.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea,self.dockShutter)
                     
                     self.dockExposure.setTitleBarWidget(QWidget())
-                    self.visualisation.addDockWidget(Qt.TopDockWidgetArea,self.dockExposure)
+                    self.visualisation.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea,self.dockExposure)
                    
                     self.dockTemp.setTitleBarWidget(QWidget())
-                    self.visualisation.addDockWidget(Qt.TopDockWidgetArea,self.dockTemp)
+                    self.visualisation.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea,self.dockTemp)
                     
                     hMainLayout.addWidget(self.visualisation)
                     
